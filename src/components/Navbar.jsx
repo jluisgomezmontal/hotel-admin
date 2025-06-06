@@ -11,7 +11,16 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 const Navbar = ({ toggleColorMode, mode }) => {
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1100, // por encima de todo
+      }}
+    >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography
           variant="h6"

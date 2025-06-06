@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   AppBar,
   Toolbar,
@@ -10,12 +11,20 @@ import {
   CardMedia,
   CardContent,
   Fab,
+  IconButton,
   useTheme,
+  Divider,
 } from "@mui/material";
 import { Spa, Pool, Restaurant, WhatsApp } from "@mui/icons-material";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
-export default function Home() {
+export default function Home({ toggleColorMode, mode }) {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -32,9 +41,14 @@ export default function Home() {
   return (
     <>
       {/* Navbar */}
-      <AppBar position="sticky" color="transparent" elevation={0}>
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h6" fontWeight="bold" color="text.primary">
+      <AppBar position="sticky" elevation={0}>
+        <Toolbar
+          sx={{
+            justifyContent: "space-between",
+            bgcolor: isDark ? "#162736" : "#2196f3",
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold" color="inherit">
             Hotel Zen
           </Typography>
           <Box>
@@ -42,11 +56,14 @@ export default function Home() {
               <Button
                 key={s.id}
                 onClick={() => scrollTo(s.id)}
-                sx={{ color: "text.primary" }}
+                sx={{ color: "inherit" }}
               >
                 {s.label}
               </Button>
             ))}
+            <IconButton onClick={toggleColorMode} color="inherit">
+              {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
@@ -273,14 +290,79 @@ export default function Home() {
       {/* Footer */}
       <Box
         sx={{
-          py: 4,
+          py: 15,
           textAlign: "center",
-          bgcolor: isDark ? "#121212" : "grey.100", // fondo casi negro neutro en dark
-          color: isDark ? "grey.400" : "text.secondary", // texto gris claro para buen contraste
+          // bgcolor: isDark ? "#413D46" : "#2196f3", // fondo casi negro neutro en dark
+          bgcolor: isDark ? "#162736" : "#2196f3", // fondo casi negro neutro en dark
+          color: isDark ? "grey.400" : "white", // texto gris claro para buen contraste
         }}
       >
+        <Box sx={{ mb: 8 }}>
+          <Grid
+            container
+            spacing={2}
+            justifyContent="space-around"
+            textAlign="left"
+          >
+            {/* Columna 1 */}
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Hotel Zen
+              </Typography>
+              <Divider sx={{ mb: 2, bgcolor: "white" }} />
+              <IconButton
+                aria-label="Facebook"
+                sx={{ color: "white" }} // Azul Facebook
+              >
+                <FacebookIcon fontSize="large" />
+              </IconButton>
+
+              <IconButton
+                aria-label="WhatsApp"
+                sx={{ color: "white" }} // Verde WhatsApp
+              >
+                <WhatsAppIcon fontSize="large" />
+              </IconButton>
+
+              <IconButton
+                aria-label="Instagram"
+                sx={{ color: "white" }} // Rosa Instagram
+              >
+                <InstagramIcon fontSize="large" />
+              </IconButton>
+            </Grid>
+
+            {/* Columna 2 */}
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Contacto
+              </Typography>
+              <Divider sx={{ mb: 2, bgcolor: "white" }} />
+              <Typography variant="body1">hotelzen@email.com</Typography>
+              <Typography variant="body1">+52 744 123 4567</Typography>
+            </Grid>
+
+            {/* Columna 3 */}
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Acceso
+              </Typography>
+              <Divider sx={{ mb: 2, bgcolor: "white" }} />
+              <Button
+                variant="contained"
+                color={isDark ? "info" : "success"}
+                component={Link}
+                to="/admin"
+              >
+                Admin
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        <Divider sx={{ mb: 10, bgcolor: "white" }} />
         <Typography variant="body2">
-          © {new Date().getFullYear()} Hotel Zen. Todos los derechos reservados.
+          © {new Date().getFullYear()} Hotel Zen. Todos los derechos
+          reservados.
         </Typography>
       </Box>
 

@@ -10,9 +10,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import api from "../services/api";
 import { useLocation } from "react-router-dom";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -20,12 +20,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
-import { fetchRooms } from "../utils";
+import { fetchRooms, submitReservation } from "../utils";
+
 dayjs.locale("es-mx");
 // en el estado:
+
 const ReservationForm = () => {
   const [isTodayChecked, setIsTodayChecked] = useState(true);
-
+  const theme = useTheme();
   const [checkInDate, setCheckInDate] = useState(dayjs());
   const [checkOutDate, setCheckOutDate] = useState(dayjs().add(1, "day"));
   const [rooms, setRooms] = useState([]);
@@ -46,17 +48,6 @@ const ReservationForm = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await api.post("/reservations", form); // usa la instancia api y ruta relativa
-      alert("Reserva enviada con éxito");
-      setForm({ name: "", email: "", phone: "", checkIn: "", checkOut: "" });
-    } catch (err) {
-      console.error(err);
-      alert("Error al enviar la reserva");
-    }
-  };
   const handleDateChange = (field) => (newValue) => {
     setIsTodayChecked(false);
 
@@ -80,13 +71,13 @@ const ReservationForm = () => {
     fetchRooms(setRooms);
   }, []);
   return (
-    <Container sx={{ py: 6 }}>
-      <Typography variant="h4" gutterBottom>
+    <Container sx={{ py: 6, pt: 12 }}>
+      <Typography variant="h4" gutterBottom color="info">
         Reserva la habitación {room?.number}
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => submitReservation(e, form, setForm, theme)}
         sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}
       >
         {room === undefined && (

@@ -8,6 +8,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { createRoom, upDateRoom } from "../utils";
@@ -29,6 +30,7 @@ export const AddRoom = ({ handleClose, editar }) => {
     number: "",
     type: "",
   });
+  const theme = useTheme();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -43,13 +45,12 @@ export const AddRoom = ({ handleClose, editar }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (Array.isArray(editar)) {
-      createRoom(form);
+      createRoom(form, theme);
     } else {
-      upDateRoom(form);
+      upDateRoom(form, theme);
     }
     handleClose();
   };
-  console.log(editar);
   return (
     <Box sx={style}>
       <Typography variant="h6" mb={2}>
